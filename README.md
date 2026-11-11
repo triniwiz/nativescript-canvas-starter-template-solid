@@ -169,9 +169,9 @@ the stack.
 These can be removed once the fixes are released:
 
 - `@nativescript/core` and `@nativescript/vite` are installed from a pkg.pr.new
-  build (`9f94e72`) of the `feat/linux` branch of [NativeScript/NativeScript](https://github.com/NativeScript/NativeScript).
-- `overrides` pins the `@nativescript/canvas*` packages to `3.0.0`.
-  They depend on each other with `"*"`, which doesn't match prereleases.
+  build (`3456c82`) of the `feat/linux` branch of [NativeScript/NativeScript](https://github.com/NativeScript/NativeScript).
+- `overrides` pins the `@nativescript/canvas*` packages to `3.0.4`, so their
+  `"*"` dependencies on each other resolve to the same release.
 - `@nativescript/linux` is pinned to an exact alpha.
 - `solid-workarounds.mjs` swaps the Solid renderer's `src/dom.js` import for
   `src/solid-dom.ts`. The original copies every DOMiNATIVE class onto
@@ -180,17 +180,7 @@ These can be removed once the fixes are released:
   runtime's `Event` and `EventTarget`. Because the renderer creates elements
   with the global `document`, the plugin also imports DOMiNATIVE's `document`
   into it.
-- `canvas-workarounds.mjs` makes the canvas package's `./platform` import
-  resolve to `platform.js` rather than the `platform/` folder
-  ([#11464](https://github.com/NativeScript/NativeScript/pull/11464)).
-  Its `threeAddons()` keeps three.js addons out of Vite's pre-bundling,
-  because HMR requests them at the wrong URL
-  ([#11466](https://github.com/NativeScript/NativeScript/pull/11466)). During
-  HMR it also points PixiJS's dynamic imports at its ES modules instead of its
-  CommonJS files, which would load a second copy of PixiJS.
-- `masonkit-hmr.mjs` stops MasonKit from loading twice during HMR. It, and the
-  HMR parts of `canvas-workarounds.mjs`, only run on the dev server, so they do
-  nothing until HMR is back on.
-- `postcss-selector-commas.mjs` makes classes with a comma, like
-  `grid-cols-[repeat(auto-fill,minmax(240,1fr))]`, match
-  ([#11463](https://github.com/NativeScript/NativeScript/pull/11463)).
+- `canvas-workarounds.mjs` points PixiJS's dynamic imports at its ES modules
+  instead of its CommonJS files during HMR, which would load a second copy
+  of PixiJS. It only runs on the dev server, so it does nothing until HMR is
+  back on.
